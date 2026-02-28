@@ -1,3 +1,7 @@
+// proof of concept of dynamic arrays
+// shows how it normally works in C without 
+// the dyn_array.h macro header
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -16,8 +20,11 @@ int* array_init(size_t init_capacity) {
 
 void array_push(int* arr, int val) {
   Header* header = (Header*)arr - 1;
-
-  assert (header->count < header->capacity);
+  if (header->count >= header->capacity) {    
+      header->capacity *= 2;                    
+      header = realloc(header, sizeof(*arr) * header->capacity + sizeof(Header)); 
+      arr = (void*)(header + 1); // make sure reallocated array points to arr               
+  }                                           
   arr[header->count++] = val;
 }
 
@@ -26,8 +33,12 @@ size_t array_len(int* arr) {
   return header->count;
 }
 
+void array_free(int* arr) {
+  free((Header*)arr - 1);
+}
+
 int main() {
-  int* numbers = array_init(256); 
+  int* numbers = array_init(2); 
   
   array_push(numbers, 11);
   array_push(numbers, 12);
@@ -36,6 +47,8 @@ int main() {
   for(int i=0; i < array_len(numbers); i++) {
     printf("%i -> %i \n", i, numbers[i]);
   }
+
+  array_free(numbers);
 
   return 0;
 }
