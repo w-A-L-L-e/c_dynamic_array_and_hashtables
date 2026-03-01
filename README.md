@@ -4,6 +4,11 @@ The entire dynamic array implementation is in dyn_array.h with 0 dependencies
 other than malloc/realloc.
 For the hashmap we used the stb libraries. But also this works with a single
 header included in this repo for convenience.
+All code here is based on the youtube tutorials from tsoding covering hashmaps:
+[https://www.youtube.com/watch?v=95M6V3mZgrI]
+
+and data tricks in c:
+[https://www.youtube.com/watch?v=gtk3RZHwJUA]
 
 ## Build
 
